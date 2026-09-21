@@ -1,3 +1,5 @@
+import uuid
+
 from fastapi.testclient import TestClient
 
 from app.main1 import app
@@ -16,11 +18,13 @@ def test_home():
 
 
 def test_create_student():
+    email = f"test-{uuid.uuid4()}@example.com"
+
     response = client.post(
         "/students",
         json={
             "name": "Test Student",
-            "email": "teststudent@example.com",
+            "email": email,
             "course": "DevOps"
         }
     )
@@ -30,6 +34,6 @@ def test_create_student():
     data = response.json()
 
     assert data["name"] == "Test Student"
-    assert data["email"] == "teststudent@example.com"
+    assert data["email"] == email
     assert data["course"] == "DevOps"
     assert "id" in data
